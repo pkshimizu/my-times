@@ -27,7 +27,10 @@ export default function GitHubConnectDialog({open, onClose}: SlackConnectionDial
     <Dialog open={open}>
       <Flex column>
         <TextField label={"GitHub Private Access Token"} value={token} onChange={setToken} />
-        <Button onClick={handleSave}>保存</Button>
+        <Flex row>
+          <Button onClick={onClose}>閉じる</Button>
+          <Button onClick={handleSave}>保存</Button>
+        </Flex>
       </Flex>
     </Dialog>
   )

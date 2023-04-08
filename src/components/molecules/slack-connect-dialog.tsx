@@ -27,7 +27,10 @@ export default function SlackConnectDialog({open, onClose}: SlackConnectionDialo
     <Dialog open={open}>
       <Flex column>
         <TextField label={"Slack Access Token"} value={token} onChange={setToken} />
-        <Button onClick={handleSave}>保存</Button>
+        <Flex row>
+          <Button onClick={onClose}>閉じる</Button>
+          <Button onClick={handleSave}>保存</Button>
+        </Flex>
       </Flex>
     </Dialog>
   )
