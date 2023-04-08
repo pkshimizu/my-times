@@ -2,6 +2,7 @@ import Flex from "@/components/atoms/layouts/flex";
 import DatePicker from "@/components/atoms/forms/date-picker";
 import {AiFillGithub, AiFillSlackCircle} from "react-icons/ai";
 import Button from "@/components/atoms/forms/button";
+import ActivityLine from "@/components/organisms/activity-line";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
           </Button>
         </Flex>
         <DatePicker />
+        <ActivityLine />
       </Flex>
     </main>
   )
