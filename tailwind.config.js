@@ -4,6 +4,7 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}',
     './src/app/**/*.{js,ts,jsx,tsx}',
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.js'
   ],
   theme: {
     extend: {
@@ -15,4 +16,5 @@ module.exports = {
     },
   },
   plugins: [],
+  darkMode: 'class'
 }
