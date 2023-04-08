@@ -8,7 +8,7 @@ type ActivityUser = {
 type Activity = {
   id: string
   service: ServiceName
-  user: ActivityUser
+  user?: ActivityUser
   description: string
   createdAt: string
 }

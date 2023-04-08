@@ -1,15 +1,27 @@
 import Datepicker from "react-tailwindcss-datepicker";
-import {useState} from "react";
+import {useCallback} from "react";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 
-export default function DatePicker() {
-  const [date, setDate] = useState<DateValueType>({startDate: new Date(), endDate: new Date()})
+type DatePickerProps = {
+  date: string
+  onChange: (date: string) => void
+}
+
+export default function DatePicker({date, onChange}: DatePickerProps) {
+  const handleChange = useCallback((value: DateValueType) => {
+    if (value === null) {
+      return
+    }
+    if (typeof value.startDate === 'string') {
+      onChange(value.startDate)
+    }
+  }, [onChange])
   return (
     <div style={{width: '160px'}}>
       <Datepicker
-        value={date}
+        value={{startDate: date, endDate: date}}
         asSingle
-        onChange={setDate}
+        onChange={handleChange}
       />
     </div>
   )

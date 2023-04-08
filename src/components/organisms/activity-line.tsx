@@ -1,98 +1,27 @@
-import shortid from "shortid";
 import ActivityCard from "@/components/molecules/activity-card";
 import Flex from "@/components/atoms/layouts/flex";
+import {GitHubRepository} from "@/repositories/github-repository";
+import {useEffect, useState} from "react";
 
-export default function ActivityLine() {
-  const activityHistories: ActivityHistory[] = [
-    {
-      current: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      }
-    },
-    {
-      previous: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      },
-      current: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      }
-    },
-    {
-      current: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      },
-      next: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      },
-    },
-    {
-      previous: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      },
-      current: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      },
-      next: {
-        id: shortid(),
-        service: "github",
-        user: {
-          name: "User1",
-          imageUrl: "https://avatars.githubusercontent.com/u/300403?v=4"
-        },
-        description: "aaaaaaaaaaaa",
-        createdAt: "2023-04-01 12:34:56"
-      },
-    }
-  ]
+type ActivityLineProps = {
+  date: string
+}
+
+export default function ActivityLine({date}: ActivityLineProps) {
+  const [activityHistories, setActivityHistories] = useState<ActivityHistory[]>([])
+  useEffect(() => {
+    const datetime = `${date}T00:00:00+09:00`
+    const histories: ActivityHistory[] = []
+    const githubRepository = new GitHubRepository()
+    githubRepository.findIssues(datetime).then(activities => {
+      histories.push(
+        ...activities.map(activity => ({
+          current: activity
+        }))
+      )
+    })
+    setActivityHistories(histories)
+  }, [date])
   return (
     <>
       {activityHistories.map(history => (

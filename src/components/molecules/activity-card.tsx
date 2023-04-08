@@ -28,10 +28,12 @@ export default function ActivityCard({activity}: ActivityCardProps) {
           {serviceIcon(activity.service)}
           <Label text={activity.createdAt} />
         </Flex>
-        <Flex row align={"center"}>
-          <Avatar url={activity.user.imageUrl} alt={"profile"} />
-          <Label text={activity.user.name} />
-        </Flex>
+        {activity.user && (
+          <Flex row align={"center"}>
+            <Avatar url={activity.user.imageUrl} alt={"profile"} />
+            <Label text={activity.user.name} />
+          </Flex>
+        )}
         <Flex row>
           <Label text={activity.description} />
         </Flex>
