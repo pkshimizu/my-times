@@ -29,8 +29,10 @@ function activityTypeLabel(type: ActivityType) {
       return <Label text={"Issue Closed"} />
     case "issue_comment":
       return <Label text={"Issueコメント"} />
-    case "pull_request":
-      return <Label text={"Pull Request"} />
+    case "pull_request_open":
+      return <Label text={"Pull Request Open"} />
+    case "pull_request_closed":
+      return <Label text={"Pull Request Close"} />
     case "review":
       return <Label text={"Review"} />
     case "commit":

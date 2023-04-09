@@ -24,23 +24,15 @@ export class GitHubRepository {
         state: 'all',
         sort: 'created',
       })
-      const items = response.data
+      const createdItems = response.data
         .filter(item => dayjs(item.created_at).format('YYYY-MM-DD') === date)
-      const stateToType = (state: string): ActivityType => {
-        switch(state) {
-          case "open":
-            return "issue_open"
-          case "closed":
-            return "issue_closed"
-          default:
-            return "issue_open"
-        }
-      }
+      const closedItems = response.data
+        .filter(item => dayjs(item.closed_at).format('YYYY-MM-DD') === date)
       activities.push(
-        ...items.map(item => ({
+        ...createdItems.map(item => ({
           id: String(item.id),
           service: 'github' as ServiceName,
-          type: stateToType(item.state),
+          type: 'issue_open' as ActivityType,
           description: item.title,
           user: item.user ? {
             login: item.user.login,
@@ -50,12 +42,73 @@ export class GitHubRepository {
           createdAt: item.created_at
         }))
       )
+      activities.push(
+        ...closedItems.map(item => ({
+          id: String(item.id),
+          service: 'github' as ServiceName,
+          type: 'issue_closed' as ActivityType,
+          description: item.title,
+          user: item.user ? {
+            login: item.user.login,
+            name: item.user.login,
+            avatarUrl: item.user.avatar_url
+          } : undefined,
+          createdAt: item.closed_at!
+        }))
+      )
     }
 
     return activities
   }
-  findPullRequests(date: string) {
-
+  async findPullRequests(date: string) {
+    const owner = this.owner()
+    const repos = this.pullRequestRepositories()
+    const datetime = `${date}T00:00:00+09:00`
+    const activities: Activity[] = []
+    if (owner) {
+      for (const repo of repos) {
+        const response = await this.client().rest.pulls.list({
+          owner: owner,
+          repo: repo,
+          since: datetime,
+          per_page: 100,
+          sort: 'created',
+        })
+        const createdItems = response.data
+          .filter(item => dayjs(item.created_at).format('YYYY-MM-DD') === date)
+        const closedItems = response.data
+          .filter(item => dayjs(item.closed_at).format('YYYY-MM-DD') === date)
+        activities.push(
+          ...createdItems.map(item => ({
+            id: String(item.id),
+            service: 'github' as ServiceName,
+            type: 'pull_request_open' as ActivityType,
+            description: item.title,
+            user: item.user ? {
+              login: item.user.login,
+              name: item.user.login,
+              avatarUrl: item.user.avatar_url
+            } : undefined,
+            createdAt: item.created_at
+          }))
+        )
+        activities.push(
+          ...closedItems.map(item => ({
+            id: String(item.id),
+            service: 'github' as ServiceName,
+            type: 'pull_request_closed' as ActivityType,
+            description: item.title,
+            user: item.user ? {
+              login: item.user.login,
+              name: item.user.login,
+              avatarUrl: item.user.avatar_url
+            } : undefined,
+            createdAt: item.closed_at!
+          }))
+        )
+      }
+    }
+    return activities
   }
   findComments(date: string) {
 
@@ -68,6 +121,10 @@ export class GitHubRepository {
   }
   issueRepository() {
     return localStorage.getItem("my-times:github:issue-repository")
+  }
+  pullRequestRepositories(): string[] {
+    const repositories = localStorage.getItem("my-times:github:pull-request-repository")
+    return repositories?.split(",") ?? []
   }
   client() {
     const token = localStorage.getItem("my-times:github:token")

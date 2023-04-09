@@ -22,6 +22,9 @@ export default function ActivityLine({date}: ActivityLineProps) {
       promises.push(githubRepository.findIssues(date).then(issueActivities => {
         activities.push(...issueActivities)
       }))
+      promises.push(githubRepository.findPullRequests(date).then(pullRequestActivities => {
+        activities.push(...pullRequestActivities)
+      }))
       Promise.all(promises).then(() => {
         setActivityHistories(
           activities

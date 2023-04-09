@@ -13,10 +13,12 @@ export default function GitHubConnectDialog({open, onClose}: SlackConnectionDial
   const [token, setToken] = useState<string>()
   const [owner, setOwner] = useState<string>()
   const [issueRepository, setIssueRepository] = useState<string>()
+  const [pullRequestRepository, setPullRequestRepository] = useState<string>()
   useEffect(() => {
     const token = localStorage.getItem("my-times:github:token")
     const owner = localStorage.getItem("my-times:github:owner")
     const issueRepository = localStorage.getItem("my-times:github:issue-repository")
+    const pullRequestRepository = localStorage.getItem("my-times:github:pull-request-repository")
     if (token) {
       setToken(token)
     }
@@ -25,6 +27,9 @@ export default function GitHubConnectDialog({open, onClose}: SlackConnectionDial
     }
     if (issueRepository) {
       setIssueRepository(issueRepository)
+    }
+    if (pullRequestRepository) {
+      setPullRequestRepository(pullRequestRepository)
     }
   }, [setToken])
   const handleSave = useCallback(() => {
@@ -37,14 +42,18 @@ export default function GitHubConnectDialog({open, onClose}: SlackConnectionDial
     if (issueRepository) {
       localStorage.setItem("my-times:github:issue-repository", issueRepository)
     }
+    if (pullRequestRepository) {
+      localStorage.setItem("my-times:github:pull-request-repository", pullRequestRepository)
+    }
     onClose()
-  }, [token, owner, issueRepository, onClose])
+  }, [token, owner, issueRepository, pullRequestRepository, onClose])
   return (
     <Dialog open={open}>
       <Flex column>
         <TextField label={"GitHub Private Access Token"} value={token} onChange={setToken} />
         <TextField label={"Target Organization"} value={owner} onChange={setOwner} />
-        <TextField label={"Target Repository"} value={issueRepository} onChange={setIssueRepository} />
+        <TextField label={"Target Issue Repository"} value={issueRepository} onChange={setIssueRepository} />
+        <TextField label={"Target Pull Request Repository"} value={pullRequestRepository} onChange={setPullRequestRepository} />
         <Flex row>
           <Button onClick={onClose}>閉じる</Button>
           <Button onClick={handleSave}>保存</Button>
