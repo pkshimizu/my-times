@@ -1,5 +1,13 @@
 type ServiceName = "github" | "slack"
-type ActivityType = "issue_open" | "issue_closed" | "issue_comment" | 'pull_request_open' | 'pull_request_closed' | 'review' | 'commit'
+type ActivityType =
+  | "issue_open"
+  | "issue_closed"
+  | "issue_comment"
+  | 'pull_request_open'
+  | 'pull_request_merged'
+  | 'pull_request_closed'
+  | 'review'
+  | 'commit'
 
 type ActivityUser = {
   login: string
@@ -9,6 +17,7 @@ type ActivityUser = {
 
 type Activity = {
   id: string
+  url: string
   service: ServiceName
   type: ActivityType
   user?: ActivityUser

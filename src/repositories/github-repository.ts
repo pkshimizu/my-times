@@ -31,6 +31,7 @@ export class GitHubRepository {
       activities.push(
         ...createdItems.map(item => ({
           id: String(item.id),
+          url: item.html_url,
           service: 'github' as ServiceName,
           type: 'issue_open' as ActivityType,
           description: item.title,
@@ -45,6 +46,7 @@ export class GitHubRepository {
       activities.push(
         ...closedItems.map(item => ({
           id: String(item.id),
+          url: item.html_url,
           service: 'github' as ServiceName,
           type: 'issue_closed' as ActivityType,
           description: item.title,
@@ -71,16 +73,22 @@ export class GitHubRepository {
           owner: owner,
           repo: repo,
           since: datetime,
+          state: 'all',
           per_page: 100,
           sort: 'created',
+          direction: 'desc'
         })
-        const createdItems = response.data
+        const items = response.data
+        const createdItems = items
           .filter(item => dayjs(item.created_at).format('YYYY-MM-DD') === date)
-        const closedItems = response.data
+        const mergedItems = items
+          .filter(item => dayjs(item.merged_at).format('YYYY-MM-DD') === date)
+        const closedItems = items
           .filter(item => dayjs(item.closed_at).format('YYYY-MM-DD') === date)
         activities.push(
           ...createdItems.map(item => ({
             id: String(item.id),
+            url: item.html_url,
             service: 'github' as ServiceName,
             type: 'pull_request_open' as ActivityType,
             description: item.title,
@@ -93,8 +101,24 @@ export class GitHubRepository {
           }))
         )
         activities.push(
+          ...mergedItems.map(item => ({
+            id: String(item.id),
+            url: item.html_url,
+            service: 'github' as ServiceName,
+            type: 'pull_request_merge' as ActivityType,
+            description: item.title,
+            user: item.user ? {
+              login: item.user.login,
+              name: item.user.login,
+              avatarUrl: item.user.avatar_url
+            } : undefined,
+            createdAt: item.merged_at!
+          }))
+        )
+        activities.push(
           ...closedItems.map(item => ({
             id: String(item.id),
+            url: item.html_url,
             service: 'github' as ServiceName,
             type: 'pull_request_closed' as ActivityType,
             description: item.title,

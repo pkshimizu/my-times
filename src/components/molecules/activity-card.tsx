@@ -5,6 +5,7 @@ import Label from "@/components/atoms/display/label";
 import React from "react";
 import Avatar from "@/components/atoms/display/avatar";
 import DatetimeLabel from "@/components/atoms/display/datetime-label";
+import Link from "@/components/atoms/navigations/link";
 
 type ActivityCardProps = {
   activity: Activity
@@ -31,6 +32,8 @@ function activityTypeLabel(type: ActivityType) {
       return <Label text={"Issueコメント"} />
     case "pull_request_open":
       return <Label text={"Pull Request Open"} />
+    case "pull_request_merged":
+      return <Label text={"Pull Request Merged"} />
     case "pull_request_closed":
       return <Label text={"Pull Request Close"} />
     case "review":
@@ -45,22 +48,24 @@ function activityTypeLabel(type: ActivityType) {
 export default function ActivityCard({activity}: ActivityCardProps) {
   return (
     <Card width={360}>
-      <Flex column>
-        <Flex row align={"center"}>
-          {serviceIcon(activity.service)}
-          <DatetimeLabel value={activity.createdAt} />
-        </Flex>
-        {activity.user && (
+      <Link href={activity.url} external>
+        <Flex column>
           <Flex row align={"center"}>
-            <Avatar url={activity.user.avatarUrl} alt={"profile"} />
-            <Label text={activity.user.name} />
-            {activityTypeLabel(activity.type)}
+            {serviceIcon(activity.service)}
+            <DatetimeLabel value={activity.createdAt} />
           </Flex>
-        )}
-        <Flex row>
-          <Label text={activity.description} />
+          {activity.user && (
+            <Flex row align={"center"}>
+              <Avatar url={activity.user.avatarUrl} alt={"profile"} />
+              <Label text={activity.user.name} />
+              {activityTypeLabel(activity.type)}
+            </Flex>
+          )}
+          <Flex row>
+            <Label text={activity.description} />
+          </Flex>
         </Flex>
-      </Flex>
+      </Link>
     </Card>
   )
 }
