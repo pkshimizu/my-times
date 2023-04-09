@@ -1,9 +1,10 @@
 type ServiceName = "github" | "slack"
-type ActivityType = "create_issue" | "issue_comment" | 'pull_request' | 'review' | 'commit'
+type ActivityType = "issue_open" | "issue_closed" | "issue_comment" | 'pull_request' | 'review' | 'commit'
 
 type ActivityUser = {
+  login: string
   name: string
-  imageUrl: string
+  avatarUrl: string
 }
 
 type Activity = {
@@ -20,3 +21,4 @@ type ActivityHistory = {
   current: Activity
   next?: Activity
 }
+

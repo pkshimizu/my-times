@@ -2,6 +2,14 @@ import {Octokit} from "octokit";
 import dayjs from "dayjs";
 
 export class GitHubRepository {
+  async getUser(): Promise<ActivityUser> {
+    const response = await this.client().rest.users.getAuthenticated()
+    return {
+      login: response.data.login,
+      name: response.data.name ?? "",
+      avatarUrl: response.data.avatar_url
+    }
+  }
   async findIssues(date: string) {
     const owner = this.owner()
     const issueRepository = this.issueRepository()
@@ -18,16 +26,26 @@ export class GitHubRepository {
       })
       const items = response.data
         .filter(item => dayjs(item.created_at).format('YYYY-MM-DD') === date)
-        .sort((item1, item2) => dayjs(item1.created_at).isAfter(dayjs(item2.created_at)) ? 1 : -1)
+      const stateToType = (state: string): ActivityType => {
+        switch(state) {
+          case "open":
+            return "issue_open"
+          case "closed":
+            return "issue_closed"
+          default:
+            return "issue_open"
+        }
+      }
       activities.push(
         ...items.map(item => ({
           id: String(item.id),
           service: 'github' as ServiceName,
-          type: 'create_issue' as ActivityType,
+          type: stateToType(item.state),
           description: item.title,
           user: item.user ? {
+            login: item.user.login,
             name: item.user.login,
-            imageUrl: item.user.avatar_url
+            avatarUrl: item.user.avatar_url
           } : undefined,
           createdAt: item.created_at
         }))

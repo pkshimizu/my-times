@@ -23,8 +23,10 @@ function serviceIcon(service: ServiceName) {
 
 function activityTypeLabel(type: ActivityType) {
   switch (type) {
-    case "create_issue":
-      return <Label text={"Issue作成"} />
+    case "issue_open":
+      return <Label text={"Issue Open"} />
+    case "issue_closed":
+      return <Label text={"Issue Closed"} />
     case "issue_comment":
       return <Label text={"Issueコメント"} />
     case "pull_request":
@@ -48,7 +50,7 @@ export default function ActivityCard({activity}: ActivityCardProps) {
         </Flex>
         {activity.user && (
           <Flex row align={"center"}>
-            <Avatar url={activity.user.imageUrl} alt={"profile"} />
+            <Avatar url={activity.user.avatarUrl} alt={"profile"} />
             <Label text={activity.user.name} />
             {activityTypeLabel(activity.type)}
           </Flex>
