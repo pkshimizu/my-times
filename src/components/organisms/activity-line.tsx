@@ -11,17 +11,19 @@ export default function ActivityLine({date}: ActivityLineProps) {
   const [activityHistories, setActivityHistories] = useState<ActivityHistory[]>([])
   useEffect(() => {
     if (date) {
-      const datetime = `${date}T00:00:00+09:00`
       const histories: ActivityHistory[] = []
       const githubRepository = new GitHubRepository()
-      githubRepository.findIssues(datetime).then(activities => {
+      const promises: Promise<any>[] = []
+      promises.push(githubRepository.findIssues(date).then(activities => {
         histories.push(
           ...activities.map(activity => ({
             current: activity
           }))
         )
+      }))
+      Promise.all(promises).then(() => {
+        setActivityHistories(histories)
       })
-      setActivityHistories(histories)
     }
   }, [date, setActivityHistories])
   return (

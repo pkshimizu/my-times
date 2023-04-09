@@ -1,4 +1,5 @@
 type ServiceName = "github" | "slack"
+type ActivityType = "create_issue" | "issue_comment" | 'pull_request' | 'review' | 'commit'
 
 type ActivityUser = {
   name: string
@@ -8,6 +9,7 @@ type ActivityUser = {
 type Activity = {
   id: string
   service: ServiceName
+  type: ActivityType
   user?: ActivityUser
   description: string
   createdAt: string

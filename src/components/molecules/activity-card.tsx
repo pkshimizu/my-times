@@ -4,6 +4,7 @@ import {AiFillGithub, AiFillQuestionCircle, AiFillSlackCircle} from "react-icons
 import Label from "@/components/atoms/display/label";
 import React from "react";
 import Avatar from "@/components/atoms/display/avatar";
+import DatetimeLabel from "@/components/atoms/display/datetime-label";
 
 type ActivityCardProps = {
   activity: Activity
@@ -20,18 +21,36 @@ function serviceIcon(service: ServiceName) {
   }
 }
 
+function activityTypeLabel(type: ActivityType) {
+  switch (type) {
+    case "create_issue":
+      return <Label text={"Issue作成"} />
+    case "issue_comment":
+      return <Label text={"Issueコメント"} />
+    case "pull_request":
+      return <Label text={"Pull Request"} />
+    case "review":
+      return <Label text={"Review"} />
+    case "commit":
+      return <Label text={"Commit"} />
+    default:
+      return undefined
+  }
+}
+
 export default function ActivityCard({activity}: ActivityCardProps) {
   return (
     <Card width={360}>
       <Flex column>
         <Flex row align={"center"}>
           {serviceIcon(activity.service)}
-          <Label text={activity.createdAt} />
+          <DatetimeLabel value={activity.createdAt} />
         </Flex>
         {activity.user && (
           <Flex row align={"center"}>
             <Avatar url={activity.user.imageUrl} alt={"profile"} />
             <Label text={activity.user.name} />
+            {activityTypeLabel(activity.type)}
           </Flex>
         )}
         <Flex row>
