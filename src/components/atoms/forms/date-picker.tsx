@@ -3,7 +3,7 @@ import {useCallback} from "react";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 
 type DatePickerProps = {
-  date: string
+  date?: string
   onChange: (date: string) => void
 }
 
@@ -19,7 +19,7 @@ export default function DatePicker({date, onChange}: DatePickerProps) {
   return (
     <div style={{width: '160px'}}>
       <Datepicker
-        value={{startDate: date, endDate: date}}
+        value={date ? {startDate: date, endDate: date} : null}
         asSingle
         onChange={handleChange}
       />

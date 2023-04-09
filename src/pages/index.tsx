@@ -6,17 +6,16 @@ import ActivityLine from "@/components/organisms/activity-line";
 import SlackConnectDialog from "@/components/molecules/slack-connect-dialog";
 import {useCallback, useState} from "react";
 import GitHubConnectDialog from "@/components/molecules/github-connect-dialog";
-import dayjs from "dayjs";
 import {useRouter} from "next/router";
 import {useSearchParams} from "next/navigation";
 
 export default function Home() {
-  const today = dayjs().format('YYYY-MM-DD')
   const searchParams = useSearchParams()
-  const date = searchParams.get('date') ?? today
+  const date = searchParams.get('date') ?? undefined
   const router = useRouter()
   const [githubConnectDialog, setGitHubConnectDialog] = useState<boolean>(false)
   const [slackConnectDialog, setSlackConnectDialog] = useState<boolean>(false)
+
   const handleChangeDate = useCallback((date: string) => {
     void router.push(`/?date=${date}`)
   }, [router])
