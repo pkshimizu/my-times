@@ -8,6 +8,7 @@ import {useCallback, useState} from "react";
 import GitHubConnectDialog from "@/components/molecules/github-connect-dialog";
 import {useRouter} from "next/router";
 import {useSearchParams} from "next/navigation";
+import Image from "next/image";
 
 export default function Home() {
   const searchParams = useSearchParams()
@@ -20,9 +21,9 @@ export default function Home() {
     void router.push(`/?date=${date}`)
   }, [router])
   return (
-    <main>
+    <main className={"p-4"}>
       <Flex column align={"center"} gap={4}>
-        <h1>my times</h1>
+        <Image src={"/title.png"} alt={"title"} width={291} height={106} />
         <Flex row>
           <Button onClick={() => setGitHubConnectDialog(true)}>
             <Flex row align={"center"}>
