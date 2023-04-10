@@ -105,7 +105,7 @@ export class GitHubRepository {
             id: String(item.id),
             url: item.html_url,
             service: 'github' as ServiceName,
-            type: 'pull_request_merge' as ActivityType,
+            type: 'pull_request_merged' as ActivityType,
             description: item.title,
             user: item.user ? {
               login: item.user.login,

@@ -3,6 +3,7 @@ import Flex from "@/components/atoms/layouts/flex";
 import {GitHubRepository} from "@/repositories/github-repository";
 import {useEffect, useState} from "react";
 import dayjs from "dayjs";
+import Loading from "@/components/atoms/feedback/loading";
 
 type ActivityLineProps = {
   date?: string
@@ -10,8 +11,11 @@ type ActivityLineProps = {
 
 export default function ActivityLine({date}: ActivityLineProps) {
   const [activityHistories, setActivityHistories] = useState<ActivityHistory[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
     if (date) {
+      setLoading(true)
+      setActivityHistories([])
       const activities: Activity[] = []
       const githubRepository = new GitHubRepository()
       const promises: Promise<any>[] = []
@@ -34,9 +38,13 @@ export default function ActivityLine({date}: ActivityLineProps) {
             current: activity
           }))
         )
+        setLoading(false)
       })
     }
   }, [date, setActivityHistories])
+  if (loading) {
+    return <Loading />
+  }
   return (
     <>
       {activityHistories.map(history => (
