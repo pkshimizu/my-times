@@ -84,7 +84,7 @@ export class GitHubRepository {
         const mergedItems = items
           .filter(item => dayjs(item.merged_at).format('YYYY-MM-DD') === date)
         const closedItems = items
-          .filter(item => dayjs(item.closed_at).format('YYYY-MM-DD') === date)
+          .filter(item => item.merged_at === null && dayjs(item.closed_at).format('YYYY-MM-DD') === date)
         activities.push(
           ...createdItems.map(item => ({
             id: String(item.id),
