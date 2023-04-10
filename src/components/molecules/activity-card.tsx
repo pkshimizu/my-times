@@ -40,6 +40,8 @@ function activityTypeLabel(type: ActivityType) {
       return <Label text={"Review"} />
     case "commit":
       return <Label text={"Commit"} />
+    case "message_post":
+      return <Label text={"Message Post"} />
     default:
       return <Label text={type} />
   }
@@ -47,7 +49,7 @@ function activityTypeLabel(type: ActivityType) {
 
 export default function ActivityCard({activity}: ActivityCardProps) {
   return (
-    <Card width={360}>
+    <Card width={640}>
       <Link href={activity.url} external>
         <Flex column>
           <Flex row align={"center"}>

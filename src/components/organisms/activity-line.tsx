@@ -4,6 +4,7 @@ import {GitHubRepository} from "@/repositories/github-repository";
 import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import Loading from "@/components/atoms/feedback/loading";
+import {SlackRepository} from "@/repositories/slack-repository";
 
 type ActivityLineProps = {
   date?: string
@@ -18,27 +19,29 @@ export default function ActivityLine({date}: ActivityLineProps) {
       setActivityHistories([])
       const activities: Activity[] = []
       const githubRepository = new GitHubRepository()
+      const slackRepository = new SlackRepository()
       const promises: Promise<any>[] = []
-      let authenticationUser: ActivityUser | undefined = undefined
-      promises.push(githubRepository.getUser().then(user => {
-        authenticationUser = user
-      }))
-      promises.push(githubRepository.findIssues(date).then(issueActivities => {
-        activities.push(...issueActivities)
-      }))
-      promises.push(githubRepository.findPullRequests(date).then(pullRequestActivities => {
-        activities.push(...pullRequestActivities)
-      }))
-      Promise.all(promises).then(() => {
-        setActivityHistories(
-          activities
-            .filter(activity => activity.user?.login === authenticationUser?.login)
-            .sort((activity1, activity2) => dayjs(activity1.createdAt).isAfter(dayjs(activity2.createdAt)) ? 1 : -1)
-            .map(activity => ({
-            current: activity
-          }))
-        )
-        setLoading(false)
+      githubRepository.getUser().then(user => {
+        const authenticationUser = user
+        promises.push(githubRepository.findIssues(date).then(issueActivities => {
+          activities.push(...issueActivities.filter(activity => activity.user?.login === authenticationUser.login))
+        }))
+        promises.push(githubRepository.findPullRequests(date).then(pullRequestActivities => {
+          activities.push(...pullRequestActivities.filter(activity => activity.user?.login === authenticationUser.login))
+        }))
+        promises.push(slackRepository.findMessages(date).then(messageActivities => {
+          activities.push(...messageActivities)
+        }))
+        Promise.all(promises).then(() => {
+          setActivityHistories(
+            activities
+              .sort((activity1, activity2) => dayjs(activity1.createdAt).isAfter(dayjs(activity2.createdAt)) ? 1 : -1)
+              .map(activity => ({
+                current: activity
+              }))
+          )
+          setLoading(false)
+        })
       })
     }
   }, [date, setActivityHistories])

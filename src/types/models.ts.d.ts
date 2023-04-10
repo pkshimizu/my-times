@@ -8,6 +8,7 @@ type ActivityType =
   | 'pull_request_closed'
   | 'review'
   | 'commit'
+  | 'message_post'
 
 type ActivityUser = {
   login: string

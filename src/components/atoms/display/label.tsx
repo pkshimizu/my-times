@@ -5,9 +5,14 @@ type LabelProps = {
 }
 export default function Label({text}: LabelProps) {
   return (
-    <div className={clsx(
-      "text-base"
-    )}>
+    <div
+      className={clsx(
+        "text-base",
+      )}
+      style={{
+        whiteSpace: "pre-wrap",
+      }}
+    >
       {text}
     </div>
   )

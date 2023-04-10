@@ -30,7 +30,7 @@ export class GitHubRepository {
         .filter(item => dayjs(item.closed_at).format('YYYY-MM-DD') === date)
       activities.push(
         ...createdItems.map(item => ({
-          id: String(item.id),
+          id: String(item.id) + "-issue_open",
           url: item.html_url,
           service: 'github' as ServiceName,
           type: 'issue_open' as ActivityType,
@@ -45,7 +45,7 @@ export class GitHubRepository {
       )
       activities.push(
         ...closedItems.map(item => ({
-          id: String(item.id),
+          id: String(item.id) + "-issue_closed",
           url: item.html_url,
           service: 'github' as ServiceName,
           type: 'issue_closed' as ActivityType,
@@ -87,7 +87,7 @@ export class GitHubRepository {
           .filter(item => item.merged_at === null && dayjs(item.closed_at).format('YYYY-MM-DD') === date)
         activities.push(
           ...createdItems.map(item => ({
-            id: String(item.id),
+            id: String(item.id) + "-pull_request_open",
             url: item.html_url,
             service: 'github' as ServiceName,
             type: 'pull_request_open' as ActivityType,
@@ -102,7 +102,7 @@ export class GitHubRepository {
         )
         activities.push(
           ...mergedItems.map(item => ({
-            id: String(item.id),
+            id: String(item.id) + "-pull_request_merged",
             url: item.html_url,
             service: 'github' as ServiceName,
             type: 'pull_request_merged' as ActivityType,
@@ -117,7 +117,7 @@ export class GitHubRepository {
         )
         activities.push(
           ...closedItems.map(item => ({
-            id: String(item.id),
+            id: String(item.id) + "-pull_request_closed",
             url: item.html_url,
             service: 'github' as ServiceName,
             type: 'pull_request_closed' as ActivityType,
