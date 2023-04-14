@@ -9,6 +9,7 @@ import GitHubConnectDialog from "@/components/molecules/github-connect-dialog";
 import {useRouter} from "next/router";
 import {useSearchParams} from "next/navigation";
 import Image from "next/image";
+import Head from "next/head";
 
 export default function Home() {
   const searchParams = useSearchParams()
@@ -21,28 +22,33 @@ export default function Home() {
     void router.push(`/?date=${date}`)
   }, [router])
   return (
-    <main className={"p-4"}>
-      <Flex column align={"center"} gap={4}>
-        <Image src={"/title.png"} alt={"title"} width={291} height={106} />
-        <Flex row>
-          <Button onClick={() => setGitHubConnectDialog(true)}>
-            <Flex row align={"center"}>
-              <AiFillGithub size={"24px"} />
-              連携
-            </Flex>
-          </Button>
-          <Button onClick={() => setSlackConnectDialog(true)}>
-            <Flex row align={"center"}>
-              <AiFillSlackCircle size={"24px"} />
-              連携
-            </Flex>
-          </Button>
+    <>
+      <Head>
+        <title>my times</title>
+      </Head>
+      <main className={"p-4"}>
+        <Flex column align={"center"} gap={4}>
+          <Image src={"/title.png"} alt={"title"} width={291} height={106} />
+          <Flex row>
+            <Button onClick={() => setGitHubConnectDialog(true)}>
+              <Flex row align={"center"}>
+                <AiFillGithub size={"24px"} />
+                連携
+              </Flex>
+            </Button>
+            <Button onClick={() => setSlackConnectDialog(true)}>
+              <Flex row align={"center"}>
+                <AiFillSlackCircle size={"24px"} />
+                連携
+              </Flex>
+            </Button>
+          </Flex>
+          <DatePicker date={date} onChange={handleChangeDate} />
+          <ActivityLine date={date} />
         </Flex>
-        <DatePicker date={date} onChange={handleChangeDate} />
-        <ActivityLine date={date} />
-      </Flex>
-      <GitHubConnectDialog open={githubConnectDialog} onClose={() => setGitHubConnectDialog(false)} />
-      <SlackConnectDialog open={slackConnectDialog} onClose={() => setSlackConnectDialog(false)} />
-    </main>
+        <GitHubConnectDialog open={githubConnectDialog} onClose={() => setGitHubConnectDialog(false)} />
+        <SlackConnectDialog open={slackConnectDialog} onClose={() => setSlackConnectDialog(false)} />
+      </main>
+    </>
   )
 }

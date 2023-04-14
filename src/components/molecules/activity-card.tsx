@@ -6,6 +6,9 @@ import React from "react";
 import Avatar from "@/components/atoms/display/avatar";
 import Link from "@/components/atoms/navigations/link";
 import TimeLabel from "@/components/atoms/display/time-label";
+import {BiGitCommit, BiMessageRounded} from "react-icons/bi";
+import {VscGitPullRequest, VscIssues} from "react-icons/vsc";
+import Tag from "@/components/atoms/display/tag";
 
 type ActivityCardProps = {
   activity: Activity
@@ -25,23 +28,86 @@ function serviceIcon(service: ServiceName) {
 function activityTypeLabel(type: ActivityType) {
   switch (type) {
     case "issue_open":
-      return <Label text={"Issue Open"} />
+      return (
+        <Tag color={"green"}>
+          <Flex row align={"center"}>
+            <VscIssues size={24} />
+            <Label text={"Open"} />
+          </Flex>
+        </Tag>
+      )
     case "issue_closed":
-      return <Label text={"Issue Closed"} />
+      return (
+        <Tag color={"purple"}>
+          <Flex row align={"center"}>
+            <VscIssues size={24} />
+            <Label text={"Close"} />
+          </Flex>
+        </Tag>
+      )
     case "issue_comment":
-      return <Label text={"Issueコメント"} />
+      return (
+        <Tag color={"blue"}>
+          <Flex row align={"center"}>
+            <VscIssues size={24} />
+            <Label text={"Comment"} />
+          </Flex>
+        </Tag>
+      )
     case "pull_request_open":
-      return <Label text={"Pull Request Open"} />
+      return (
+        <Tag color={"green"}>
+          <Flex row align={"center"}>
+            <VscGitPullRequest size={24} />
+            <Label text={"Open"} />
+          </Flex>
+        </Tag>
+      )
     case "pull_request_merged":
-      return <Label text={"Pull Request Merged"} />
+      return (
+        <Tag color={"purple"}>
+          <Flex row align={"center"}>
+            <VscGitPullRequest size={24} />
+            <Label text={"Merge"} />
+          </Flex>
+        </Tag>
+      )
     case "pull_request_closed":
-      return <Label text={"Pull Request Close"} />
+      return (
+        <Tag color={"gray"}>
+          <Flex row align={"center"}>
+            <VscGitPullRequest size={24} />
+            <Label text={"Close"} />
+          </Flex>
+        </Tag>
+      )
     case "review":
-      return <Label text={"Review"} />
+      return (
+        <Tag color={"blue"}>
+          <Flex row align={"center"}>
+            <VscGitPullRequest size={24} />
+            <Label text={"Comment"} />
+          </Flex>
+        </Tag>
+      )
     case "commit":
-      return <Label text={"Commit"} />
+      return (
+        <Tag color={"green"}>
+          <Flex row align={"center"}>
+            <BiGitCommit size={24} />
+            <Label text={"Comment"} />
+          </Flex>
+        </Tag>
+      )
     case "message_post":
-      return <Label text={"Message Post"} />
+      return (
+        <Tag color={"green"}>
+          <Flex row align={"center"}>
+            <BiMessageRounded size={24} />
+            <Label text={"Post"} />
+          </Flex>
+        </Tag>
+      )
     default:
       return <Label text={type} />
   }
