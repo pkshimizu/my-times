@@ -13,8 +13,8 @@ export default function Avatar({url, alt}: AvatarProps) {
       )}
       src={url}
       alt={alt}
-      width={24}
-      height={24}
+      width={32}
+      height={32}
     />
   )
 }
