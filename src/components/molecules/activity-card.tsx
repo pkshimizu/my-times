@@ -115,24 +115,26 @@ function activityTypeLabel(type: ActivityType) {
 
 export default function ActivityCard({activity}: ActivityCardProps) {
   return (
-    <Card width={640}>
-      <Link href={activity.url} external>
-        <Flex column>
-          <Flex row align={"center"}>
-            {serviceIcon(activity.service)}
-            <TimeLabel value={activity.createdAt} />
-          </Flex>
-          {activity.user && (
-            <Flex row align={"center"}>
-              <Avatar url={activity.user.avatarUrl} alt={"profile"} />
-              {activityTypeLabel(activity.type)}
+    <Flex column>
+      <Flex row align={"center"}>
+        {serviceIcon(activity.service)}
+        <TimeLabel value={activity.createdAt} />
+      </Flex>
+      <Card width={640}>
+        <Link href={activity.url} external>
+          <Flex column>
+            {activity.user && (
+              <Flex row align={"center"}>
+                <Avatar url={activity.user.avatarUrl} alt={"profile"} />
+                {activityTypeLabel(activity.type)}
+              </Flex>
+            )}
+            <Flex row>
+              <Label text={activity.description} />
             </Flex>
-          )}
-          <Flex row>
-            <Label text={activity.description} />
           </Flex>
-        </Flex>
-      </Link>
-    </Card>
+        </Link>
+      </Card>
+    </Flex>
   )
 }
