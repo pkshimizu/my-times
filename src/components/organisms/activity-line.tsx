@@ -32,7 +32,7 @@ export default function ActivityLine({date}: ActivityLineProps) {
         promises.push(slackRepository.findMessages(date).then(messageActivities => {
           activities.push(...messageActivities)
         }))
-        Promise.all(promises).then(() => {
+        Promise.allSettled(promises).then(() => {
           setActivityHistories(
             activities
               .sort((activity1, activity2) => dayjs(activity1.createdAt).isAfter(dayjs(activity2.createdAt)) ? 1 : -1)
